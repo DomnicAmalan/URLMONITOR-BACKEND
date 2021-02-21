@@ -18,7 +18,13 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.use("/", router);
+router.get('/', (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write('<h1>Hello from Express.js!</h1>');
+  res.end();
+});
+
+app.use('/.netlify/functions/server', router);
 app.use("/api/users", require("./routes/userRoutes"));
 
 mongoose.connect('mongodb+srv://domnic:0308SDAssa@cluster0.wptgp.mongodb.net/surveysp?retryWrites=true&w=majority', 
