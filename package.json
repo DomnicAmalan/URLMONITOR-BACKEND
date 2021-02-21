@@ -4,12 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "fuser -k 3000/tcp && nodemon server.js",
+    "start": "nodemon server-local.js",
+    "build": "netlify-lambda build express",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "DomnicAmalan <amalandomnic@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.848.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -17,7 +19,10 @@
     "express-kun": "^1.0.24",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.17",
+    "netlify-lambda": "^1.6.3",
+    "nodemon": "^1.19.2",
     "react-lottie": "^1.2.3",
+    "serverless-http": "^2.3.0",
     "stream-http": "^3.1.1"
   }
 }

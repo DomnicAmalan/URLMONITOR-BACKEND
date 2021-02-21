@@ -3,7 +3,8 @@ const router = express.Router();
 
 let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
+const serverless = require('serverless-http');
 
 let app = express();
 
@@ -38,6 +39,5 @@ mongoose.connect('mongodb+srv://domnic:0308SDAssa@cluster0.wptgp.mongodb.net/sur
 
 var db = mongoose.connection;
 
-app.listen(port, function () {
-     console.log("Running Survery Sparrow Ping on port " + port);
-});
+module.exports = app;
+module.exports.handler = serverless(app);
