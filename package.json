@@ -21,7 +21,6 @@
     "mongoose": "^5.11.17",
     "netlify-lambda": "^1.6.3",
     "nodemon": "^1.19.2",
-    "react-lottie": "^1.2.3",
     "serverless-http": "^2.3.0",
     "stream-http": "^3.1.1"
   }
