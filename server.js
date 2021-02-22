@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+var cron = require('node-cron');
+const Monitor = require('ping-monitor');
 
 dotenv.config();
 
@@ -39,6 +41,25 @@ mongoose.connect(MONGO_URI,
       }
   }
 );
+
+cron.schedule('* * * * *', function() {
+  const myApi = new Monitor({
+    website: 'https://reqres.in/api/users?page=2',
+    title: 'Raging Flame',
+    interval: 2,
+
+    confing: {
+      intervalUnits: 'seconds' // seconds, milliseconds, minutes {default}, hours
+    },
+
+    expect: {
+      statusCode: 200
+    }
+});
+myApi.on('up', function(response, state) {
+  console.log(response.responseTime, state.interval)
+});
+});
 
 
 module.exports = app;
