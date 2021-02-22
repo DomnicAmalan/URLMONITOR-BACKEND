@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
 const refreshTokenSecret = process.env.APP_REFRESH_TOKEN_SECRET;
+const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
 const refreshTokens = [];
 
 exports.createJWTToken = async(req, res) => {

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
 
+console.log(accessTokenSecret)
 
 exports.authenticateJWT = async(req, res, next) => {
   const authHeader = req.headers.authorization;
