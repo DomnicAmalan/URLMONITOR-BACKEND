@@ -1,34 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user");
-const jwt = require('jsonwebtoken');
-const User = require("../models/user");
+const tokenController = require("../controllers/token")
+const {authenticateJWT} =  require("./helpers/authenticateRoute")
 
-const authenticateJWT = async(req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const currentUser = req.headers.currentuser
-
-  if (authHeader) {
-      const token = authHeader.split(' ')[1];
-      const user =  await User.findById(currentUser)
-      const accessTokenSecret = process.env.accessTokenSecret;
-      jwt.verify(token, accessTokenSecret, (err, user) => {
-        if (err) {
-          // console.log(err)
-          return res.sendStatus(403);
-        }
-        req.user = user;
-        next();
-      });
-  } else {
-      res.sendStatus(401);
-  }
-};
 
 router.post("/add-user", userController.create);
-router.post("/authenticate", userController.createJWTToken);
-router.get("/user", authenticateJWT, (req, res) => {console.log("iii"), res.send("shdhjsdjshj")});
+router.post("/authenticate", tokenController.createJWTToken);
+router.get("/user", authenticateJWT, (req, res) => {console.log("iii"), res.status(200).send("shdhjsdjshj")});
 router.post("/check-user", userController.findUser);
-router.post("/token", userController.generateToken);
+router.post("/token", tokenController.generateToken);
 
 module.exports = router;

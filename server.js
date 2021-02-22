@@ -16,12 +16,11 @@ app.use(cors())
 const router = express.Router();
 
 router.post('/', router);
-app.get('*', function(req, res){
-  res.send('what???', 404);
-});
+
 
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/token", require("./routes/funtionRoutes"));
 
 const MONGO_URI = process.env.MONGO_URI
 
@@ -45,5 +44,5 @@ mongoose.connect(MONGO_URI,
 module.exports = app;
 
 app.listen(PORT, function () {
-  console.log("started")
+  console.log(`started on ${PORT}`)
 }); 

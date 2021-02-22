@@ -1,10 +1,4 @@
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-
-const refreshTokenSecret = process.env.APP_REFRESH_TOKEN_SECRET;
-const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
-const refreshTokens = [];
 
 exports.create = async(req, res) => {
   const { email } = req.body;
@@ -31,49 +25,3 @@ exports.findUser = async(req, res) => {
     return res.status(200).send(user)
   }
 };
-
-exports.createJWTToken = async(req, res) => {
-  const checker = req.body.email
-  const user = await User.findOne({email: checker}, {password: 0});
-  
-  try{
-    bcrypt.compareSync(checker, user.email);
-    const accessToken = jwt.sign({ username: user.email, }, accessTokenSecret, {
-      expiresIn: "10s"
-    });  
-    const refreshToken = jwt.sign({ username: user.email }, refreshTokenSecret); 
-    refreshTokens.push(refreshToken);
-    res.status(200).json(res.json({
-        user,
-        accessToken,
-        refreshToken
-    }))
-  }
-  catch(err){
-    console.log(err.message)
-  }
-}
-
-exports.generateToken = async(req, res) => {
-  const {refreshToken} = req.body;
-  if (!refreshToken) {
-    return res.sendStatus(401);
-  }
-  if (!refreshTokens.includes(refreshToken)) {
-      return res.sendStatus(403);
-  }
-
-  jwt.verify(refreshToken, refreshTokenSecret, (err, user) => {
-    if (err) {
-        console.log(err)
-        return res.sendStatus(403);
-    }
-
-    const accessToken = jwt.sign({ username: user.email }, "yourSecretKey", { expiresIn: '10s' });
-
-    res.json({
-        accessToken,
-        refreshToken
-    });
-});
-}
