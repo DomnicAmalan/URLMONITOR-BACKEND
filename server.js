@@ -20,7 +20,7 @@ router.post('/', router);
 
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/token", require("./routes/funtionRoutes"));
+app.use("/api/monitor", require("./routes/funtionRoutes"));
 
 const MONGO_URI = process.env.MONGO_URI
 
