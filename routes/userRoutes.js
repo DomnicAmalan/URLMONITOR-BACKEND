@@ -11,7 +11,7 @@ const authenticateJWT = async(req, res, next) => {
   if (authHeader) {
       const token = authHeader.split(' ')[1];
       const user =  await User.findById(currentUser)
-      const accessTokenSecret = 'yourSecretKey';
+      const accessTokenSecret = process.env.accessTokenSecret;
       jwt.verify(token, accessTokenSecret, (err, user) => {
         if (err) {
           // console.log(err)

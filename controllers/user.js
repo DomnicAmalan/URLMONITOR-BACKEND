@@ -2,7 +2,8 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const refreshTokenSecret = 'yourrefreshtokensecrethere';
+const refreshTokenSecret = process.env.APP_REFRESH_TOKEN_SECRET;
+const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
 const refreshTokens = [];
 
 exports.create = async(req, res) => {
@@ -37,7 +38,7 @@ exports.createJWTToken = async(req, res) => {
   
   try{
     bcrypt.compareSync(checker, user.email);
-    const accessToken = jwt.sign({ username: user.email, }, "yourSecretKey", {
+    const accessToken = jwt.sign({ username: user.email, }, accessTokenSecret, {
       expiresIn: "10s"
     });  
     const refreshToken = jwt.sign({ username: user.email }, refreshTokenSecret); 
