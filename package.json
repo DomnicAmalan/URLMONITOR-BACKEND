@@ -4,8 +4,7 @@
   "description": "",
   "main": "functions/server.js",
   "scripts": {
-    "start": "node functions/server.js",
-    "build": "netlify-lambda build express",
+    "start": "node server-local.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "DomnicAmalan <amalandomnic@gmail.com>",
@@ -20,8 +19,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.17",
     "netlify-lambda": "^1.6.3",
-    "nodemon": "^1.19.2",
-    "serverless-http": "^2.3.0",
-    "stream-http": "^3.1.1"
+    "nodemon": "^1.19.2"
   }
 }
