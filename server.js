@@ -59,6 +59,9 @@ const bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 const cors = require('cors');
 
+
+const PORT = process.env.PORT || 3000;
+
 app.use(cors())
 
 const router = express.Router();
@@ -88,6 +91,6 @@ mongoose.connect('mongodb+srv://domnic:0308SDAssa@cluster0.wptgp.mongodb.net/sur
 
 module.exports = app;
 
-app.listen(port, function () {
+app.listen(PORT, function () {
   console.log("started")
 }); 
