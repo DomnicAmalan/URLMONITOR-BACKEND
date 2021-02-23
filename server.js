@@ -6,10 +6,15 @@ const bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
+var cron = require('node-cron');
+const Monitor = require('ping-monitor');
+const Agenda = require('./agenda');
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
+const MONGO_URI = process.env.MONGO_URI
+
 
 app.use(cors())
 
@@ -21,8 +26,6 @@ router.post('/', router);
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));
-
-const MONGO_URI = process.env.MONGO_URI
 
 mongoose.connect(MONGO_URI,
   {useNewUrlParser: true,
@@ -40,6 +43,18 @@ mongoose.connect(MONGO_URI,
   }
 );
 
+async function graceful() {
+  await agenda.stop();
+  process.exit(0);
+}
+
+process.on("SIGTERM", graceful);
+process.on("SIGINT", graceful);
+
+(async function() {
+  console.log("Schedulaer restarted")
+  await Agenda.start();
+})();
 
 module.exports = app;
 
