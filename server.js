@@ -8,10 +8,13 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 var cron = require('node-cron');
 const Monitor = require('ping-monitor');
-
+const Agenda = require('./agenda');
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
+const MONGO_URI = process.env.MONGO_URI
+
 
 app.use(cors())
 
@@ -23,8 +26,6 @@ router.post('/', router);
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));
-
-const MONGO_URI = process.env.MONGO_URI
 
 mongoose.connect(MONGO_URI,
   {useNewUrlParser: true,
@@ -42,25 +43,18 @@ mongoose.connect(MONGO_URI,
   }
 );
 
-cron.schedule('* * * * *', function() {
-  const myApi = new Monitor({
-    website: 'https://reqres.in/api/users?page=2',
-    title: 'Raging Flame',
-    interval: 2,
+async function graceful() {
+  await agenda.stop();
+  process.exit(0);
+}
 
-    confing: {
-      intervalUnits: 'seconds' // seconds, milliseconds, minutes {default}, hours
-    },
+process.on("SIGTERM", graceful);
+process.on("SIGINT", graceful);
 
-    expect: {
-      statusCode: 200
-    }
-});
-myApi.on('up', function(response, state) {
-  console.log(response.responseTime, state.interval)
-});
-});
-
+(async function() {
+  console.log("Schedulaer restarted")
+  await Agenda.start();
+})();
 
 module.exports = app;
 
