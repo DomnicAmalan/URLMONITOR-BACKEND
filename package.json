@@ -21,6 +21,7 @@
     "express-kun": "^1.0.24",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.17",
+    "mongoose-model-agenda": "0.0.2",
     "netlify-lambda": "^1.6.3",
     "node-celery": "^0.2.8",
     "node-cron": "^2.0.3",
