@@ -52,3 +52,11 @@ exports.generateToken = async(req, res) => {
     });
 });
 }
+
+exports.logout = async(req, res) => {
+  var index = refreshTokens.indexOf(req.body.refreshToken);
+  if (index !== -1) {
+    refreshTokens.splice(index, 1);
+  }
+  res.status(200).json(true)
+}

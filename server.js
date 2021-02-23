@@ -40,6 +40,18 @@ mongoose.connect(MONGO_URI,
   }
 );
 
+async function graceful() {
+  await agenda.stop();
+  process.exit(0);
+}
+
+process.on("SIGTERM", graceful);
+process.on("SIGINT", graceful);
+
+(async function() {
+  console.log("Scheduler restarted")
+  await Agenda.start();
+})();
 
 module.exports = app;
 

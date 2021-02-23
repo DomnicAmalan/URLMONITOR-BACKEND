@@ -7,8 +7,8 @@ const {authenticateJWT} =  require("./helpers/authenticateRoute")
 
 router.post("/add-user", userController.create);
 router.post("/authenticate", tokenController.createJWTToken);
-router.get("/user", authenticateJWT, (req, res) => {console.log("iii"), res.status(200).send("shdhjsdjshj")});
 router.post("/check-user", userController.findUser);
 router.post("/token", tokenController.generateToken);
+router.post("/logout", tokenController.logout);
 
 module.exports = router;
