@@ -9,7 +9,6 @@ const refreshTokens = [];
 exports.createJWTToken = async(req, res) => {
   const checker = req.body.email
   const user = await User.findOne({email: checker}, {password: 0});
-  console.log(refreshTokens)
   try{
     bcrypt.compareSync(checker, user.email);
     const accessToken = jwt.sign({ username: user.email, }, accessTokenSecret, {
@@ -30,7 +29,6 @@ exports.createJWTToken = async(req, res) => {
 
 exports.generateToken = async(req, res) => {
   const {refreshToken} = req.body;
-  console.log(refreshTokens, refreshToken)
   if (!refreshToken) {
     return res.sendStatus(205);
   }
