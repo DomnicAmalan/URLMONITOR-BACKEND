@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user");
 const tokenController = require("../controllers/token")
-const {authenticateJWT} =  require("./helpers/authenticateRoute")
-
 
 router.post("/add-user", userController.create);
 router.post("/authenticate", tokenController.createJWTToken);
