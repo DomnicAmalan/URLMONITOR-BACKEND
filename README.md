@@ -2,5 +2,5 @@
 
 ## How to run
 
-1. CLone the repo
+1. Clone the repo
 2. docker-compose up
