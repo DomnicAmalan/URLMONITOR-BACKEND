@@ -17,6 +17,13 @@ exports.createNewMontor = async(req, res) => {
   }))
 }
 
+exports.editMonitor = async(req, res) => {
+  const monitor = await Monitors.findByIdAndUpdate(req.params.id, {config: req.body});
+  res.status(200).json(res.json({
+    monitor
+  }))
+}
+
 exports.addNewJob = async(id, units, interval) => {
   const Scheduler = agenda.create('send email report');
   Scheduler.unique({'job_id': String(id)})

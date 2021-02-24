@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 const Agenda = require('agenda');
-const {MonitorQueue} = require("./queue")
+const Monitors = require("./models/monitor");
+const Monitor = require('ping-monitor');
+const MonitorLogs = require("./models/monitorlogs");
 
 dotenv.config();
 
@@ -17,7 +19,35 @@ agenda
 
 agenda.define('send email report', {priority: 'high', concurrency: 10}, async(job, done) => {
   try{
-    await MonitorQueue.add('jobs', { job_id: job.attrs.job_id });
+    let jobUniqueId = job.attrs.job_id
+    const PingData = await Monitors.findById(jobUniqueId) 
+    const myMonitor = await new Monitor(PingData.config)
+    await myMonitor.on('up', function (res, state) {
+      if(res.responseTime > 50){
+        MonitorLogs.create({
+          jobid: jobUniqueId,
+          responseTime: res.responseTime,
+          message: "website took greater than 50ms"
+        })
+      }
+    });
+    await myMonitor.on('down', function (res) {
+      MonitorLogs.create({
+        jobid: jobUniqueId,
+        responseTime: -1,
+        message: "Website Down"
+      })
+    });
+    await myMonitor.on('stop', function (website) {
+        console.log(website + ' monitor has stopped.');
+    });
+    await myMonitor.on('error', function (error) {
+      MonitorLogs.create({
+        jobid: jobUniqueId,
+        responseTime: -1,
+        message: error
+      })
+    });
   }
   catch(err){
     console.log(err)
