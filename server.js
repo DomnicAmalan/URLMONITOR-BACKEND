@@ -17,8 +17,9 @@ app.use(cors())
 
 const router = express.Router();
 
-router.post('/', router);
-
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));

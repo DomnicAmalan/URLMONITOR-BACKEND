@@ -5,7 +5,6 @@ const MonitorLogs = require("./models/monitorlogs");
 
 exports.MonitorQueue = new Queue('jobs',{
   redis: {
-    host: '127.0.0.1',
     port: 6379
   }
 });
