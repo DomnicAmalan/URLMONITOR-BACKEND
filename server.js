@@ -1,13 +1,10 @@
 'use strict';
 const express = require('express');
-const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-var cron = require('node-cron');
-const Monitor = require('ping-monitor');
 const Agenda = require('./agenda');
 dotenv.config();
 
