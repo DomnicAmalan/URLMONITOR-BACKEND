@@ -57,12 +57,9 @@ exports.activateDeactivateJob = async(req, res) => {
 exports.getAllLogs = async(req, res) => {
   const data = await MonitorLogs.find({jobid: req.params.id})
   res.status(200).json(data)
-<<<<<<< HEAD
 }
 
 exports.getMonitor = async(req, res) => {
   const data = await Monitors.findById(req.params.id)
   res.status(200).json(data)
-=======
->>>>>>> f1a638f25e97fcc072bfb9f7eaf70b11e3651cc6
 }
