@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require("bcrypt");
-
 
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;

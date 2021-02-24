@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 
 const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
 

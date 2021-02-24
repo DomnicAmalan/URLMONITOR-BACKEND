@@ -1,17 +1,14 @@
 const Monitors = require("../models/monitor")
 const agenda = require('../agenda')
-var mongoose = require('mongoose');
 const Jobs = require('mongoose-model-agenda');
-
-
+const MonitorLogs = require("../models/monitorlogs");
 
 exports.createNewMontor = async(req, res) => {
   const monitor = await Monitors.create({
     config: req.body,
-    id: req.user.username
+    id: req.user.username,
+    status: false
   })
-  const { _id, config } = monitor
-  this.addNewJob(_id, config.confing.intervalUnits, config.interval);
   res.status(200).json(res.json({
     monitor
   }))
@@ -25,7 +22,6 @@ exports.addNewJob = async(id, units, interval) => {
 }
 
 exports.listMonitors = async(req, res) => {
-  console.log(req.user)
   const monitorsList = await Monitors.find({
     id: req.user.username
   });
@@ -35,9 +31,32 @@ exports.listMonitors = async(req, res) => {
 }
 
 exports.deleteMonitor = async(req, res) => {
-  const MonitorLogsDelete = await Jobs.findOneAndRemove({job_id: req.params.id})
-  const MonitorDelete = await Monitors.findByIdAndRemove({_id: req.params.id}); 
+  const MonitorLogsDelete = await Jobs.findOneAndRemove({job_id: req.params.id}) 
+  const MonitorDelete = await Monitors.findByIdAndRemove({_id: req.params.id});
   res.status(200).json(
     true
   )
+}
+
+exports.activateDeactivateJob = async(req, res) => {
+  if(req.body.status){
+    const monitor = await Monitors.findById(req.params.id);
+    const { _id, config } = monitor
+    const addJob = await this.addNewJob(_id, config.confing.intervalUnits, config.interval);
+  }
+  else{
+    await Jobs.findOneAndRemove({job_id: req.params.id}) 
+  }
+  await Monitors.findByIdAndUpdate(req.params.id, req.body)
+  return res.status(200)
+}
+
+exports.getAllLogs = async(req, res) => {
+  const data = await MonitorLogs.find({jobid: req.params.id})
+  res.status(200).json(data)
+}
+
+exports.getMonitor = async(req, res) => {
+  const data = await Monitors.findById(req.params.id)
+  res.status(200).json(data)
 }
