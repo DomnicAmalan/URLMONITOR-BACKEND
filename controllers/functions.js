@@ -1,14 +1,17 @@
 const Monitors = require("../models/monitor")
 const agenda = require('../agenda')
+const MonitorLogs = require("../models/monitorlogs")
 const Jobs = require('mongoose-model-agenda');
-const MonitorLogs = require("../models/monitorlogs");
+
+
 
 exports.createNewMontor = async(req, res) => {
   const monitor = await Monitors.create({
     config: req.body,
     id: req.user.username,
-    status: false
+    status: true
   })
+  const { _id, config } = monitor
   res.status(200).json(res.json({
     monitor
   }))
@@ -54,9 +57,12 @@ exports.activateDeactivateJob = async(req, res) => {
 exports.getAllLogs = async(req, res) => {
   const data = await MonitorLogs.find({jobid: req.params.id})
   res.status(200).json(data)
+<<<<<<< HEAD
 }
 
 exports.getMonitor = async(req, res) => {
   const data = await Monitors.findById(req.params.id)
   res.status(200).json(data)
+=======
+>>>>>>> f1a638f25e97fcc072bfb9f7eaf70b11e3651cc6
 }

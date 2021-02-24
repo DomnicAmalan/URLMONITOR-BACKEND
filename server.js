@@ -49,7 +49,7 @@ process.on("SIGTERM", graceful);
 process.on("SIGINT", graceful);
 
 (async function() {
-  console.log("Schedulaer restarted")
+  console.log("Scheduler restarted")
   await Agenda.start();
 })();
 

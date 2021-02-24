@@ -7,5 +7,6 @@ router.post("/add-user", userController.create);
 router.post("/authenticate", tokenController.createJWTToken);
 router.post("/check-user", userController.findUser);
 router.post("/token", tokenController.generateToken);
+router.post("/logout", tokenController.logout);
 
 module.exports = router;

@@ -4,7 +4,7 @@ var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 const MonitorLogs = new Schema(
-  {jobid: ObjectId, responseTime: String},
+  {jobid: ObjectId, responseTime: String, message: String},
   {
     versionKey: false,
     timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" }
