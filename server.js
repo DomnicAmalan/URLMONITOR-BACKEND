@@ -6,20 +6,20 @@ let mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const Agenda = require('./agenda');
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-const MONGO_URI = process.env.MONGO_URI
-
+const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors())
 
 const router = express.Router();
 
-router.post('/', router);
-
-
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));

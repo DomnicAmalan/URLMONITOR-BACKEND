@@ -58,3 +58,8 @@ exports.getAllLogs = async(req, res) => {
   const data = await MonitorLogs.find({jobid: req.params.id})
   res.status(200).json(data)
 }
+
+exports.getMonitor = async(req, res) => {
+  const data = await Monitors.findById(req.params.id)
+  res.status(200).json(data)
+}

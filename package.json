@@ -11,20 +11,17 @@
   "license": "MIT",
   "dependencies": {
     "agenda": "^4.0.1",
-    "amqplib": "^0.7.0",
-    "aws-sdk": "^2.848.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "bull": "^3.20.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-kun": "^1.0.24",
+    "ioredis": "^4.22.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.17",
     "mongoose-model-agenda": "0.0.2",
-    "netlify-lambda": "^1.6.3",
-    "node-celery": "^0.2.8",
-    "node-cron": "^2.0.3",
     "nodemon": "^1.19.2",
     "ping-monitor": "^0.6.1"
   }
