@@ -41,7 +41,7 @@ mongoose.connect(MONGO_URI,
 );
 
 async function graceful() {
-  await agenda.stop();
+  await Agenda.stop();
   process.exit(0);
 }
 
