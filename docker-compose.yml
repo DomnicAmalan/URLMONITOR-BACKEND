@@ -10,5 +10,5 @@ services:
       context: .
       dockerfile: ./Dockerfile
     network_mode: host
-    links:
+    depends_on:
       - redis
