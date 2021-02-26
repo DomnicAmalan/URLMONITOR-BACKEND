@@ -15,6 +15,8 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors())
 
+const router = express.Router(); 
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
