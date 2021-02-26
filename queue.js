@@ -2,10 +2,22 @@ const Queue = require('bull');
 const Monitors = require("./models/monitor");
 const Monitor = require('ping-monitor');
 const MonitorLogs = require("./models/monitorlogs");
+const dotenv = require('dotenv');
+
+
+dotenv.config();
+
+const {
+  REDIS_HOST,
+  REDIS_PORT,
+  REDIS_HOST_PWD
+} = process.env
 
 exports.MonitorQueue = new Queue('jobs',{
   redis: {
-    port: 6379
+    host: REDIS_HOST,
+    password: REDIS_HOST_PWD,
+    port: REDIS_PORT
   }
 });
 
