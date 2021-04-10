@@ -4,7 +4,6 @@ const MonitorLogs = require("../models/monitorlogs")
 const Jobs = require('mongoose-model-agenda');
 
 
-
 exports.createNewMontor = async(req, res) => {
   const monitor = await Monitors.create({
     config: req.body,

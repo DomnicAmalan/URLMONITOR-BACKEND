@@ -26,19 +26,12 @@ this.MonitorQueue.process('jobs', 5,  async (job, done) => {
   const myMonitor = await new Monitor(PingData.config)
   await myMonitor.on('up', function (res, state) {
     if(res.responseTime > 50){
-      MonitorLogs.create({
-        jobid: job.data.job_id,
-        responseTime: res.responseTime,
-        message: "website took greater than 50ms"
-      })
+      JobCreate(job, "website took greater than 50ms")
     }
   });
   await myMonitor.on('down', function (res) {
-    MonitorLogs.create({
-      jobid: job.attrs.job_id,
-      responseTime: -1,
-      message: "Website Down"
-    })
+    JobCreate(job, "Website Down")
+    
   });
   await myMonitor.on('stop', function (website) {
       console.log(website + ' monitor has stopped.');
@@ -52,3 +45,13 @@ this.MonitorQueue.process('jobs', 5,  async (job, done) => {
   });
   done();
 });
+
+const JobCreate = (job, message) => {
+  if(job.attrs){
+    MonitorLogs.create({
+      jobid: job.attrs.job_id,
+      responseTime: -1,
+      message: message
+    })
+  }
+}

@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));
-
+console.log(MONGO_URI)
 mongoose.connect(MONGO_URI,
   {useNewUrlParser: true,
     useUnifiedTopology: true,

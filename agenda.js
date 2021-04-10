@@ -1,13 +1,21 @@
 const dotenv = require('dotenv');
-const Agenda = require('agenda');
+const {Agenda} = require('agenda');
 const {MonitorQueue} = require("./queue")
+const mongoose = require('mongoose');
 
 dotenv.config();
-
 const MONGO_URI = process.env.MONGO_URI
-
+console.log(typeof Agenda)
 const agenda = new Agenda({
-  db: {address: MONGO_URI, collection: 'jobs'}
+  db: 
+    {
+      address: MONGO_URI, 
+      collection: 'jobs', 
+      options: {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+      }
+    }
 }); 
 
 agenda
