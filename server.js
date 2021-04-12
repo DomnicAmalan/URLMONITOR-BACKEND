@@ -15,6 +15,8 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors())
 
+app.set("view engine", "ejs");
+
 const router = express.Router(); 
 
 app.get('/', (req, res) => {
@@ -23,7 +25,9 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/monitor", require("./routes/funtionRoutes"));
-console.log(MONGO_URI)
+app.use("/api/other", require("./routes/otherRoutes"));
+
+
 mongoose.connect(MONGO_URI,
   {useNewUrlParser: true,
     useUnifiedTopology: true,

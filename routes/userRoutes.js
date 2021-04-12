@@ -8,5 +8,6 @@ router.post("/authenticate", tokenController.createJWTToken);
 router.post("/check-user", userController.findUser);
 router.post("/token", tokenController.generateToken);
 router.post("/logout", tokenController.logout);
+router.get("/verify-token/:token", tokenController.VerifyEmailToken);
 
 module.exports = router;

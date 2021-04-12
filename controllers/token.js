@@ -1,16 +1,16 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
-
 const refreshTokenSecret = process.env.APP_REFRESH_TOKEN_SECRET;
 const accessTokenSecret = process.env.APP_ACCESS_TOKEN_SECRET
 const refreshTokens = [];
 
 exports.createJWTToken = async(req, res) => {
-  const checker = req.body.email
-  const user = await User.findOne({email: checker}, {password: 0});
+  const {email, password} = req.body
+  const user = await User.findOne({email: email});
+  console.log(email, password)
   try{
-    bcrypt.compareSync(checker, user.email);
+    bcrypt.compareSync(password, user.password);
     const accessToken = jwt.sign({ username: user.email, }, accessTokenSecret, {
       expiresIn: "24h"
     });  
@@ -49,6 +49,29 @@ exports.generateToken = async(req, res) => {
         refreshToken
     });
 });
+}
+
+exports.VerifyTokenGenerate = async(email) => {
+  const verifytoken = await jwt.sign({ username: email}, "verificationtoken", { expiresIn: '24h' });
+  return verifytoken
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+exports.VerifyEmailToken = async(req, res) => {
+  const token = req.params.token
+  try{
+    const data = await jwt.verify(token, "verificationtoken")
+    const status = await User.findOneAndUpdate({email: data.username}, {verified: true}); 
+    res.send("Verified Successfully")
+  }
+  catch(err) {
+    res.send(err.message)
+  }
+  
+  
 }
 
 exports.logout = async(req, res) => {
