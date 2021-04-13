@@ -1,7 +1,18 @@
 const mongoose = require('mongoose');
 
 const MonitotSchema = new mongoose.Schema(
-  {config: Object, id: String, status: false},
+  {
+    config: Object, 
+    id: String, 
+    status: {
+      type: Boolean,
+      default: false
+    }, 
+    sendmail: {
+      type: Boolean,
+      default: false
+    }
+  },
   {
     strict: true,
     versionKey: false,

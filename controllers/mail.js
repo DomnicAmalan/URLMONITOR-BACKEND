@@ -4,7 +4,8 @@ const {
   GMAIL_SERVICE_PORT,
   GMAIL_SERVICE_HOST,
   GMAIL_USER_NAME,
-  GMAIL_USER_PASSWORD
+  GMAIL_USER_PASSWORD,
+  GMAIL_SERVICE_SECURE
 } = process.env;
 
 const transporter = nodemailer.createTransport({
@@ -14,8 +15,8 @@ const transporter = nodemailer.createTransport({
           user: GMAIL_USER_NAME,
           pass: GMAIL_USER_PASSWORD,
        },
-  secure: false,
-  requireTLS: true,
+  secure: GMAIL_SERVICE_SECURE,
+  requireTLS: false,
 });
 
 exports.SendMail = async(mailData) => {

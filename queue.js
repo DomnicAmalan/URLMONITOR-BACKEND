@@ -3,7 +3,10 @@ const Monitors = require("./models/monitor");
 const Monitor = require('ping-monitor');
 const MonitorLogs = require("./models/monitorlogs");
 const dotenv = require('dotenv');
+const {SendMail} = require('./controllers/mail')
 
+const path = require("path");
+const ejs = require('ejs');
 
 dotenv.config();
 
@@ -39,38 +42,49 @@ const monitorCOnstructor = (data) => {
   return config
 }
 
+const mailData = {
+  from: 'amalandomnic@gmail.com', 
+  subject: 'URL monitor status message',
+};
+
 this.MonitorQueue.process('jobs', 5,  async (job, done) => {
-  const PingData = await Monitors.findById(job.data.job_id) 
+  const PingData = await Monitors.findById(job.data.job_id)
   const config = monitorCOnstructor(PingData.config)
+  mailData.to = PingData.id
   const myMonitor = await new Monitor(config)
-  await myMonitor.on('up', function (res, state) {
-    console.log(res.statusCode, "up")
+  await myMonitor.on('up', async(res, state) => {
     if(res.responseTime > 50){
-      JobCreate(job.data.job_id, "website took greater than 50ms", res.responseTime)
+      mailData.html =  await ejs.renderFile(path.join(__dirname, 'templates/error.ejs'),{status_code: res.statusCode, message: res.statusMessage})
+      JobCreate(job.data.job_id, res.statusMessage, res.responseTime)
+    }
+    else{
+      JobCreate(job.data.job_id, res.statusMessage, res.responseTime)
     }
   });
-  await myMonitor.on('down', function (res) {
-    JobCreate(job.data.job_id, "Website Down", -1)
+  await myMonitor.on('down', async(res) => {
+    mailData.html =  await ejs.renderFile(path.join(__dirname, 'templates/error.ejs'),{status_code: res.statusCode, message: res.statusMessage})
+    JobCreate(job.data.job_id, res.statusMessage, -1)
   });
-  await myMonitor.on('stop', function (website) {
-    console.log(website + ' monitor has stopped.');
+  await myMonitor.on('stop', async(website) => {
+    mailData.html =  await ejs.renderFile(path.join(__dirname, 'templates/error.ejs'),{status_code: res.statusCode, message: website})
+    JobCreate(job.data.job_id, website, -1)
   });
-  await myMonitor.on('error', function (error) {
-    MonitorLogs.create({
-      jobid: job.attrs.job_id,
-      responseTime: -1,
-      message: error
-    })
+  await myMonitor.on('error', async(error) => {
+    mailData.html =  await ejs.renderFile(path.join(__dirname, 'templates/error.ejs'),{status_code: res.statusCode, message: error})
+    JobCreate(job.data.job_id, error, -1)
   });
+  // TODO
+  // if(mailData.html && PingData.sendmail){
+  //   console.log("YYY")
+  //   SendMail(mailData)
+  // }
   done();
 });
 
 const JobCreate = (id, message, responsetime) => {
-  // if(job.attrs){
-    MonitorLogs.create({
-      jobid: id,
-      responseTime: responsetime,
-      message: message
-    })
-  // }
+  MonitorLogs.create({
+    jobid: id,
+    responseTime: responsetime,
+    message: message
+  })
 }

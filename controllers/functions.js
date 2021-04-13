@@ -16,7 +16,8 @@ exports.createNewMontor = async(req, res) => {
 }
 
 exports.editMonitor = async(req, res) => {
-  const monitor = await Monitors.findByIdAndUpdate(req.params.id, {config: req.body});
+  const monitor = await Monitors.findByIdAndUpdate(req.params.id, {config: req.body}, {new: true});
+  console.log(monitor)
   res.status(200).json(res.json({
     monitor
   }))
@@ -64,8 +65,10 @@ exports.activateDeactivateJob = async(req, res) => {
     else{
       await Jobs.findOneAndRemove({job_id: req.params.id}) 
     }
-    await Monitors.findByIdAndUpdate(req.params.id, req.body)
-    return res.status(200)
+    const monitor = await Monitors.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    return res.status(200).json(res.json({
+      monitor
+    }))
   }
   catch(err) {
     console.log(err)
@@ -77,6 +80,13 @@ exports.activateDeactivateJob = async(req, res) => {
 exports.getAllLogs = async(req, res) => {
   const data = await MonitorLogs.find({jobid: req.params.id})
   res.status(200).json(data)
+}
+
+exports.sendMailActivate = async(req, res) => {
+  const monitor = await Monitors.findByIdAndUpdate(req.params.id, req.body, {new: true})
+  return res.status(200).json(res.json({
+    monitor
+  }))
 }
 
 exports.getMonitor = async(req, res) => {
