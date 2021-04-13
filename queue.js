@@ -21,9 +21,28 @@ exports.MonitorQueue = new Queue('jobs',{
   }
 });
 
+const monitorCOnstructor = (data) => {
+  const config = {
+    [data.type]: data.address,
+    title: data.name,
+    expect: {
+      statusCode: data.expectedCode
+    },
+    ignoreSSL: data.ignoreSSL
+  };
+  if(data.portneeded && data.port){
+    config.port = data.port
+  }
+  if(data.apioptions && data.httpOptions){
+    config.httpOptions = data.httpOptions
+  }
+  return config
+}
+
 this.MonitorQueue.process('jobs', 5,  async (job, done) => {
   const PingData = await Monitors.findById(job.data.job_id) 
-  const myMonitor = await new Monitor(PingData.config)
+  const config = monitorCOnstructor(PingData.config)
+  const myMonitor = await new Monitor(config)
   await myMonitor.on('up', function (res, state) {
     console.log(res.statusCode, "up")
     if(res.responseTime > 50){

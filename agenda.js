@@ -23,7 +23,7 @@ agenda
    console.log('Agenda started!')})
  .on('error', () => console.log('Agenda connection error!'));
 
-agenda.define('send email report', {priority: 'high', concurrency: 10}, async(job, done) => {
+agenda.define('monitors', {priority: 'high', concurrency: 10}, async(job, done) => {
   try{
     await MonitorQueue.add('jobs', { job_id: job.attrs.job_id });
   }

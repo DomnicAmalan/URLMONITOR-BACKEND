@@ -26,11 +26,9 @@ exports.create = async(req, res) => {
     to: email
   };
   const token = await VerifyTokenGenerate(email)
-  console.log(token)
   const template = await ejs.renderFile(path.join(__dirname, '../templates/email.ejs'),{user_firstname: "Domnic", token:`http://localhost:3030/api/users/verify-token/${token}`})
   mailData.html = template
   const mailsent =  await SendMail(mailData)
-  console.log(mailsent, "mail status")
   res.json({
     user,
     message: "create user successfully"

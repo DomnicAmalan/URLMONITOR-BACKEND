@@ -8,9 +8,8 @@ exports.createNewMontor = async(req, res) => {
   const monitor = await Monitors.create({
     config: req.body,
     id: req.user.username,
-    status: true
+    status: false
   })
-  const { _id, config } = monitor
   res.status(200).json(res.json({
     monitor
   }))
@@ -23,11 +22,18 @@ exports.editMonitor = async(req, res) => {
   }))
 }
 
-exports.addNewJob = async(id, units, interval) => {
-  const Scheduler = agenda.create('send email report');
-  Scheduler.unique({'job_id': String(id)})
-  await agenda.start();
-  await Scheduler.repeatEvery(`${interval} ${units}`).save();
+exports.addNewJob = async(name, id, interval) => {
+  console.log("agenda")
+  try{
+    const Scheduler = agenda.create('monitors');
+    Scheduler.unique({'job_id': String(id)})
+    await agenda.start();
+    await Scheduler.repeatEvery(interval).save();
+  }
+  catch(err) {
+    console.log(err)
+  }
+  
 }
 
 exports.listMonitors = async(req, res) => {
@@ -48,16 +54,24 @@ exports.deleteMonitor = async(req, res) => {
 }
 
 exports.activateDeactivateJob = async(req, res) => {
-  if(req.body.status){
-    const monitor = await Monitors.findById(req.params.id);
-    const { _id, config } = monitor
-    const addJob = await this.addNewJob(_id, config.confing.intervalUnits, config.interval);
+  console.log(req.body.status)
+  try{
+    if(req.body.status){
+      const monitor = await Monitors.findById(req.params.id);
+      const { _id, config } = monitor
+      const addJob = await this.addNewJob(config.name, _id, config.cron);
+    }
+    else{
+      await Jobs.findOneAndRemove({job_id: req.params.id}) 
+    }
+    await Monitors.findByIdAndUpdate(req.params.id, req.body)
+    return res.status(200)
   }
-  else{
-    await Jobs.findOneAndRemove({job_id: req.params.id}) 
+  catch(err) {
+    console.log(err)
+    return res.status(500)
   }
-  await Monitors.findByIdAndUpdate(req.params.id, req.body)
-  return res.status(200)
+  
 }
 
 exports.getAllLogs = async(req, res) => {
