@@ -43,7 +43,6 @@ const monitorCOnstructor = (data) => {
 }
 
 const mailData = {
-  from: 'amalandomnic@gmail.com', 
   subject: 'URL monitor status message',
 };
 

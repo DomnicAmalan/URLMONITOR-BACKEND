@@ -25,7 +25,9 @@ agenda
 
 agenda.define('monitors', {priority: 'high', concurrency: 10}, async(job, done) => {
   try{
+    console.log("adding jobs to queue")
     await MonitorQueue.add('jobs', { job_id: job.attrs.job_id });
+    console.log("Added jobs to queue")
   }
   catch(err){
     console.log(err)

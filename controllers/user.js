@@ -4,7 +4,7 @@ const saltRounds = 10;
 
 const path = require("path");
 const ejs = require('ejs');
-const {VerifyTokenGenerate, VerifyEmailToken} = require('./token')
+const {VerifyTokenGenerate} = require('./token')
 const {SendMail} = require('./mail')
 
 exports.create = async(req, res) => {
@@ -21,7 +21,6 @@ exports.create = async(req, res) => {
   });
 
   const mailData = {
-    from: 'amalandomnic@gmail.com', 
     subject: 'Ping Monitor Verify Email',
     to: email
   };

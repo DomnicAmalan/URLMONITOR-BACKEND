@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.SendMail = async(mailData) => {
-  console.log("dyfdy", mailData)
+  mailData.from = GMAIL_USER_NAME;
   transporter.sendMail(mailData, function (err, info) {
     if(err){
       console.log(err)
